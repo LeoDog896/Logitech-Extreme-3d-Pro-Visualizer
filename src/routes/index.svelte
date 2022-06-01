@@ -35,12 +35,12 @@
           top_right: bool((parsedRawData[4] & 0x20) >> 5)
         },
         side_panel: {
-          top_left: bool((parsedRawData[4] & 0x40) >> 6),
-          top_right: bool((parsedRawData[4] & 0x80) >> 7),
-          middle_left: bool((parsedRawData[6] & 0x01) >> 0),
-          middle_right: bool((parsedRawData[6] & 0x02) >> 1),
-          bottom_left: bool((parsedRawData[6] & 0x04) >> 2),
-          bottom_right: bool((parsedRawData[6] & 0x08) >> 3)
+          left_bottom: bool((parsedRawData[4] & 0x40) >> 6),
+          left_top: bool((parsedRawData[4] & 0x80) >> 7),
+          middle_bottom: bool((parsedRawData[6] & 0x01) >> 0),
+          middle_top: bool((parsedRawData[6] & 0x02) >> 1),
+          right_bottom: bool((parsedRawData[6] & 0x04) >> 2),
+          right_top: bool((parsedRawData[6] & 0x08) >> 3)
         }
       }
     };
@@ -78,6 +78,20 @@
   <p>Yaw: {processedData.yaw}</p>
   <p>View: {processedData.view}</p>
   <p>Throttle: {processedData.throttle}</p>
+  <p>Trigger: {processedData.buttons.trigger}</p>
+  <p>Side Grip: {processedData.buttons.side_grip}</p>
+  <br>
+  <p>Top Left Controller Button: {processedData.buttons.controller_buttons.top_left}</p>
+  <p>Top Right Controller Button: {processedData.buttons.controller_buttons.top_right}</p>
+  <p>Bottom Left Controller Button: {processedData.buttons.controller_buttons.bottom_left}</p>
+  <p>Bottom Right Controller Button: {processedData.buttons.controller_buttons.bottom_right}</p>
+  <br>
+  <p>Left Top Side Panel: {processedData.buttons.side_panel.left_top}</p>
+  <p>Left Bottom Side Panel: {processedData.buttons.side_panel.left_bottom}</p>
+  <p>Middle Top Side Panel: {processedData.buttons.side_panel.middle_top}</p>
+  <p>Middle Bottom Side Panel: {processedData.buttons.side_panel.middle_bottom}</p>
+  <p>Right Top Controller Button: {processedData.buttons.side_panel.right_top}</p>
+  <p>Right Bottom Controller Button: {processedData.buttons.side_panel.right_bottom}</p>
 {:else}
   <button class="fixed top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition-all" on:click={open}>Open</button>
 {/if}
