@@ -1,4 +1,7 @@
 <script lang="ts">
+  import type { ControllerData } from "$lib/controllerData"
+  import SidePanel from "$lib/SidePanel.svelte"
+
   let opened = false
 
   const bool = (num: number) => num !== 0;
@@ -9,7 +12,7 @@
       .join('');
   }
 
-  function processData(view: DataView) {
+  function processData(view: DataView): ControllerData {
 
     const rawData = buf2hex(view.buffer).match(/..?/g)
 
@@ -73,7 +76,7 @@
     })
   }
 </script>
-{#if opened && processedData}
+{#if processedData}
   <p>X: {processedData.position.x} | Y: {processedData.position.y}</p>
   <p>Yaw: {processedData.yaw}</p>
   <p>View: {processedData.view}</p>
@@ -86,12 +89,9 @@
   <p>Bottom Left Controller Button: {processedData.buttons.controller_buttons.bottom_left}</p>
   <p>Bottom Right Controller Button: {processedData.buttons.controller_buttons.bottom_right}</p>
   <br>
-  <p>Left Top Side Panel: {processedData.buttons.side_panel.left_top}</p>
-  <p>Left Bottom Side Panel: {processedData.buttons.side_panel.left_bottom}</p>
-  <p>Middle Top Side Panel: {processedData.buttons.side_panel.middle_top}</p>
-  <p>Middle Bottom Side Panel: {processedData.buttons.side_panel.middle_bottom}</p>
-  <p>Right Top Controller Button: {processedData.buttons.side_panel.right_top}</p>
-  <p>Right Bottom Controller Button: {processedData.buttons.side_panel.right_bottom}</p>
+  <SidePanel data={processedData}/>
+{:else if opened}
+  <p>Waiting for input...</p>
 {:else}
   <button class="fixed top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition-all" on:click={open}>Open</button>
 {/if}
