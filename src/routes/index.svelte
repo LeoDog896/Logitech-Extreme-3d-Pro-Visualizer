@@ -1,6 +1,9 @@
 <script lang="ts">
   import type { ControllerData } from "$lib/controllerData"
   import SidePanel from "$lib/SidePanel.svelte"
+  import ControllerPanel from "$lib/ControllerPanel.svelte"
+  import Boolean from "$lib/Boolean.svelte"
+  import ThrottleVisualizer from "$lib/ThrottleVisualizer.svelte"
 
   let opened = false
 
@@ -16,7 +19,7 @@
 
     const rawData = buf2hex(view.buffer).match(/..?/g)
 
-    if (rawData == null) return;
+    if (rawData == null) throw Error("No data?");
 
     const parsedRawData = rawData.map((item) => parseInt(item, 16));
 
@@ -38,12 +41,12 @@
           top_right: bool((parsedRawData[4] & 0x20) >> 5)
         },
         side_panel: {
-          left_bottom: bool((parsedRawData[4] & 0x40) >> 6),
-          left_top: bool((parsedRawData[4] & 0x80) >> 7),
-          middle_bottom: bool((parsedRawData[6] & 0x01) >> 0),
-          middle_top: bool((parsedRawData[6] & 0x02) >> 1),
-          right_bottom: bool((parsedRawData[6] & 0x04) >> 2),
-          right_top: bool((parsedRawData[6] & 0x08) >> 3)
+          bottom_left: bool((parsedRawData[4] & 0x40) >> 6),
+          top_left: bool((parsedRawData[4] & 0x80) >> 7),
+          bottom_middle: bool((parsedRawData[6] & 0x01) >> 0),
+          top_middle: bool((parsedRawData[6] & 0x02) >> 1),
+          bottom_right: bool((parsedRawData[6] & 0x04) >> 2),
+          top_right: bool((parsedRawData[6] & 0x08) >> 3)
         }
       }
     };
@@ -77,21 +80,27 @@
   }
 </script>
 {#if processedData}
-  <p>X: {processedData.position.x} | Y: {processedData.position.y}</p>
-  <p>Yaw: {processedData.yaw}</p>
-  <p>View: {processedData.view}</p>
-  <p>Throttle: {processedData.throttle}</p>
-  <p>Trigger: {processedData.buttons.trigger}</p>
-  <p>Side Grip: {processedData.buttons.side_grip}</p>
-  <br>
-  <p>Top Left Controller Button: {processedData.buttons.controller_buttons.top_left}</p>
-  <p>Top Right Controller Button: {processedData.buttons.controller_buttons.top_right}</p>
-  <p>Bottom Left Controller Button: {processedData.buttons.controller_buttons.bottom_left}</p>
-  <p>Bottom Right Controller Button: {processedData.buttons.controller_buttons.bottom_right}</p>
-  <br>
-  <SidePanel data={processedData}/>
+  <div class="m-8">
+    <p>X: {processedData.position.x} | Y: {processedData.position.y}</p>
+    <p>Yaw: {processedData.yaw}</p>
+    <p>View: {processedData.view}</p>
+    <p>Throttle: <ThrottleVisualizer throttleValue={processedData.throttle}/>{processedData.throttle}</p>
+    <p>Trigger: <Boolean value={processedData.buttons.trigger}/></p>
+    <p>Side Grip: <Boolean value={processedData.buttons.side_grip}/></p>
+    <br>
+    <ControllerPanel data={processedData}/>
+    <br>
+    <SidePanel data={processedData}/>
+  </div>
 {:else if opened}
   <p>Waiting for input...</p>
 {:else}
-  <button class="fixed top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition-all" on:click={open}>Open</button>
+  <button 
+    class="
+    fixed top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]
+    px-16 py-8 rounded-lg bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition-all
+    text-5xl
+    "
+    on:click={open}
+  >Begin Visualizer</button>
 {/if}
