@@ -14,7 +14,7 @@ const config = {
 	kit: {
 		adapter: adapter(),
     paths: {
-      base: "/logitech-extreme-3d-pro-visualizer"
+      base: "/Logitech-Extreme-3d-Pro-Visualizer"
     },
     prerender: {
       default: true
