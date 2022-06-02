@@ -3,7 +3,7 @@
   import SidePanel from "$lib/SidePanel.svelte"
   import ControllerPanel from "$lib/ControllerPanel.svelte"
   import Boolean from "$lib/Boolean.svelte"
-  import ThrottleVisualizer from "$lib/ThrottleVisualizer.svelte"
+  import GeneralVisualizer from "$lib/GeneralVisualizer.svelte"
 
   let opened = false
 
@@ -81,10 +81,11 @@
 </script>
 {#if processedData}
   <div class="m-8">
+    <GeneralVisualizer data={processedData}></GeneralVisualizer>
     <p>X: {processedData.position.x} | Y: {processedData.position.y}</p>
     <p>Yaw: {processedData.yaw}</p>
     <p>View: {processedData.view}</p>
-    <p>Throttle: <ThrottleVisualizer throttleValue={processedData.throttle}/>{processedData.throttle}</p>
+    <p>Throttle: {processedData.throttle}</p>
     <p>Trigger: <Boolean value={processedData.buttons.trigger}/></p>
     <p>Side Grip: <Boolean value={processedData.buttons.side_grip}/></p>
     <br>
